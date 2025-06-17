@@ -118,33 +118,34 @@ function renderCalendar(month, year) {
         cell.textContent = date;
 
         commemorativeDates.forEach(event => {
-          if (
-            event.date.getFullYear() === year &&
-            event.date.getMonth() === month &&
-            event.date.getDate() === date
-          ) {
-            const label = document.createElement("div");
-            label.textContent = event.name;
-            label.style.fontSize = "0.7em";
-            label.style.color = "blue";
-            label.style.marginTop = "5px";
-            cell.appendChild(label);
-          }
-        });
-      } else {
-        // empty cell before 1st or after last day
-        cell.textContent = "";
+           if (
+             event.date.getFullYear() === year &&
+             event.date.getMonth() === month &&
+             event.date.getDate() === date
+           ) {
+             const label = document.createElement("div");
+             label.textContent = event.name;
+             label.style.fontSize = "0.7em";
+             label.style.color = "blue";
+             label.style.marginTop = "5px";
+             cell.appendChild(label);
+           }
+         });
+       } else {
+         // empty cell before 1st or after last day
+         cell.textContent = "";
+       }
+ 
+       row.appendChild(cell);
+       date++;
+     }
+ 
+     table.appendChild(row);
+
+        // Stop creating rows once all days rendered
+        if (date > daysInMonth) break;
       }
 
-      row.appendChild(cell);
-      date++;
-    }
-
-    table.appendChild(row);
-
-    // Stop creating rows once all days rendered
-    if (date > daysInMonth) break;
-  }
-
+  
   calendar.appendChild(table);
 }
