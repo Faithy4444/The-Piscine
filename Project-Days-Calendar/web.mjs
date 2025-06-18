@@ -13,18 +13,22 @@ import daysData from "./days.json" with { type: "json" };
 
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const calendar = document.getElementById("calendar");
+const monthSelect = document.getElementById("month-select");
+const yearSelect = document.getElementById("year-select");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const monthSelect = document.getElementById("month-select");
-  const yearSelect = document.getElementById("year-select");
 
+  //Populate month dropDown
   for (let i = 0; i < 12; i++) {
     const option = document.createElement("option");
     option.value = i;
     option.text = new Date(2000, i).toLocaleString("en-GB", { month: "long" });
     monthSelect.appendChild(option);
   }
-
+//Populate year dropDown from 1900-2100
   for (let y = 1900; y <= 2100; y++) {
     const option = document.createElement("option");
     option.value = y;
@@ -35,7 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
   monthSelect.value = currentMonth;
   yearSelect.value = currentYear;
 
-  document.getElementById("prev").addEventListener("click", () => {
+  //eventListener for previous button
+  prevBtn.addEventListener("click", () => {
     currentMonth--;
     if (currentMonth < 0) {
       currentMonth = 11;
@@ -44,8 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDropdowns();
     renderCalendar(currentMonth, currentYear);
   });
-
-  document.getElementById("next").addEventListener("click", () => {
+  
+  //eventlistener for next button
+ nextBtn.addEventListener("click", () => {
     currentMonth++;
     if (currentMonth > 11) {
       currentMonth = 0;
@@ -55,13 +61,19 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCalendar(currentMonth, currentYear);
   });
 
-  document.getElementById("go").addEventListener("click", () => {
-    currentMonth = parseInt(monthSelect.value);
-    currentYear = parseInt(yearSelect.value);
-    renderCalendar(currentMonth, currentYear);
-  });
-
+  //eventListener for calender to change the date when month or year is changed
+  monthSelect.addEventListener("change", () => {
+  currentMonth = parseInt(monthSelect.value, 10);
   renderCalendar(currentMonth, currentYear);
+});
+
+yearSelect.addEventListener("change", () => {
+  currentYear = parseInt(yearSelect.value, 10);
+  renderCalendar(currentMonth, currentYear);
+});
+  
+  //renders the current month and years
+renderCalendar(currentMonth, currentYear);
 });
 
 function updateDropdowns() {
@@ -71,7 +83,6 @@ function updateDropdowns() {
 
 
 function renderCalendar(month, year) {
-  const calendar = document.getElementById("calendar");
   calendar.innerHTML = "";
 
   const firstDay = new Date(year, month, 1);
@@ -79,13 +90,15 @@ function renderCalendar(month, year) {
   // We want Monday=0 ... Sunday=6
   const startDay = (firstDay.getDay() + 6) % 7;
 
+  //gets days in a month
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const monthName = new Date(year, month).toLocaleString("en-GB", { month: "long" });
   document.getElementById("current-month").textContent = `${monthName} ${year}`;
 
-  // Prepare commemorative dates as before
+  // Gets dates for the year
   const commemorativeDates = resolveCommemorativeDates(daysData, year);
 
+  //creates table
   const table = document.createElement("table");
   table.style.borderCollapse = "collapse";
   table.style.width = "100%";
@@ -125,7 +138,7 @@ function renderCalendar(month, year) {
            ) {
              const label = document.createElement("div");
              label.textContent = event.name;
-             label.style.fontSize = "0.7em";
+             label.style.fontSize = "9px";
              label.style.color = "blue";
              label.style.marginTop = "5px";
              cell.appendChild(label);
