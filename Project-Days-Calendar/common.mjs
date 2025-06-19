@@ -19,12 +19,14 @@ function getNthWeekdayOfMonth(year, month, weekday, occurrence) {
 
   if (occurrence === "last") {
     // Start from last day of month, go backwards to find weekday
+
     const lastDay = new Date(Date.UTC(year, month + 1, 0));
     let day =  lastDay.getUTCDate();
 
     while (true) {
       date = new Date(Date.UTC(year, month, day));
      if (date.getUTCDay() === weekday) break;
+
       day--;
     }
     return date;
@@ -40,12 +42,15 @@ function getNthWeekdayOfMonth(year, month, weekday, occurrence) {
   const n = occurrenceMap[occurrence.toLowerCase()];
   if (!n) throw new Error(`Invalid occurrence: ${occurrence}`);
 
+
   const firstDay =  new Date(Date.UTC(year, month, 1));
   const firstDayWeekday = firstDay.getUTCDay();
 
 
+
   // Calculate offset to first occurrence of weekday
   let day = 1 + ((7 + weekday - firstDayWeekday) % 7) + (7 * (n - 1));
+
 
   return new Date(Date.UTC(year, month, day));
 }
