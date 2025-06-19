@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   monthSelect.addEventListener("change", () => {
     currentMonth = parseInt(monthSelect.value, 10);
     renderCalendar(currentMonth, currentYear);
-  })
+  });
     yearSelect.addEventListener("change", () => {
       currentYear = parseInt(yearSelect.value, 10);
       renderCalendar(currentMonth, currentYear);
@@ -70,13 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
   
     //renders the current month and years
     renderCalendar(currentMonth, currentYear);
-  });
+  
 
   function updateDropdowns() {
     document.getElementById("month-select").value = currentMonth;
     document.getElementById("year-select").value = currentYear;
   }
-
+});
 
   function renderCalendar(month, year) {
     calendar.innerHTML = "";
