@@ -3,6 +3,8 @@
 // You can delete the contents of the file once you have understood how it
 // works.
 
-export function makeFetchRequest() {
+/**export function makeFetchRequest() {
   return fetch("https://example.com/test");
-}
+}**/
+
+//const userListInput = document.getElementById

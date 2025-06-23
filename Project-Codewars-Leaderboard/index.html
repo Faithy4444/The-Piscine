@@ -6,7 +6,40 @@
   <title>Codewars leaderboard</title>
 </head>
 <body>
-  
+ <main>
+    <h1>Codewars Leaderboard</h1>
+
+    <form id="user-form" aria-label="Codewars Usernames Form">
+      <label for="usernames-input">Enter Codewars usernames (comma-separated):</label>
+      <input
+        type="text"
+        id="usernames-input"
+        name="usernames"
+        placeholder="e.g. CodeYourFuture,40thieves,SallyMcGrath"
+        aria-describedby="input-help"
+        required
+      />
+      <small id="input-help">Separate usernames with commas</small>
+      <button type="submit">Show Leaderboard</button>
+    </form>
+
+    <div id="language-select-container" hidden>
+      <label for="language-select">Select ranking language:</label>
+      <select id="language-select" aria-label="Select ranking language"></select>
+    </div>
+
+    <table id="leaderboard-table" aria-label="Codewars leaderboard" hidden>
+      <thead>
+        <tr>
+          <th scope="col">Username</th>
+          <th scope="col">Clan</th>
+          <th scope="col">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </main>
 </body>
 
 <script src="index.mjs" type="module"></script>
