@@ -18,7 +18,7 @@ let usersData = []; //array to store the data fetched
 
 //fetching Data from Api
 
-async function fetchUserData(username) {
+export async function fetchUserData(username) {
   const url = `https://www.codewars.com/api/v1/users/${username}`;
 
   try {
@@ -58,7 +58,7 @@ form.addEventListener("submit", async (e) => {
 
 //Function to poplulate the LanguageDrop down
 
-function populateLanguageDropDown(users) {
+export function populateLanguageDropDown(users) {
   const languages = new Set();
   users.forEach(user => {
     if (user && user.ranks && user.ranks.languages) {
