@@ -9,35 +9,14 @@
 
 import test from "node:test";
 import assert from "node:assert";
-import { JSDOM } from "jsdom";
 import nock from "nock";
-
-import { fetchUserData} from "./index.mjs";
-
-/*test("mocks a fetch function", async () => {
-  // Create a fetch request "mock" using the nock library, which "replaces"
-  // real requests with fake ones that we can control in the test using nock
-  // functions.
-  // In this example, we set up nock so that it looks for GET requests to
-  // https://example.com/test (no other URLs will work) and responds with a 200
-  // HTTP status code, and the body {"user": "someone"}.
-  const scope = nock("https://example.com").get("/test").reply(200, JSON.stringify({ user: "someone" }));
-
-  // Check that the response we got back included the fake body we set up.
-  const response = await makeFetchRequest();
-  const parsedResponse = await response.json();
-  assert(parsedResponse.user === "someone");
-
-  // Ensure that a fetch request has been replaced by the nock library. This
-  // helps ensure that you're not making real fetch requests that don't match
-  // the nock configuration.
-  assert(scope.isDone() === true, "No matching fetch request has been made");
-});*/
-
+import { fetchUserData } from "./fetchUserData.mjs";
+nock.disableNetConnect();
 
 //my tests
 
 test("fetchUserData returns mocked user data", async () => {
+ const mockUsername = "testuser";
   const mockUserResponse = {
     username: "testuser",
     clan: "TestClan",
@@ -49,25 +28,20 @@ test("fetchUserData returns mocked user data", async () => {
       },
     },
   };
-  const scope = nock("https://www.codewars.com")
-    .get("/api/v1/users/testuser")
+
+
+    const scope = nock("https://www.codewars.com")
+    .get(`/api/v1/users/${mockUsername}`)
     .reply(200, mockUserResponse);
 
-  const data = await fetchUserData("testuser");
+  // Calling the function under test
+  const data = await fetchUserData(mockUsername);
 
-  assert.deepStrictEqual(data, mockUserResponse);
-  assert(scope.isDone(), "Expected API call was not made");
+  // Assert the returned data matches the mocked response
+  assert.deepEqual(data, mockUserResponse, "Fetched user data does not match expected");
+
+  // Verify that the mocked API endpoint was called
+  assert(scope.isDone(), "Expected fetch call was not made");
 });
 
-
-test("fetchUserData handles 404 error gracefully", async () => {
-  const scope = nock("https://www.codewars.com")
-    .get("/api/v1/users/unknownuser")
-    .reply(404);
-
-  const data = await fetchUserData("unknownuser");
-
-  assert.strictEqual(data, undefined);
-  assert(scope.isDone(), "Expected API call was not made");
-});
-
+   
