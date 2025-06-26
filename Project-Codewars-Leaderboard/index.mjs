@@ -114,9 +114,11 @@ function leaderboardTable(selectedLanguage) {
     : filteredUsers[0].ranks.languages[selectedLanguage].score;
   
   //Making the table rows for each user
-  filteredUsers.forEach(user => {
-    const tr = document.createElement("tr");
-
+  filteredUsers.forEach((user, index) => {
+   const tr = document.createElement("tr");
+  if (index === 0) {
+    tr.classList.add("top-user");
+  }
       const usernameTd = document.createElement("td");
     usernameTd.textContent = user.username;
 
