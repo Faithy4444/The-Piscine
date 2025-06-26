@@ -9,10 +9,10 @@
 
 const form = document.getElementById("user-form");
 let userListInput = form["usernames"];
-const submitBtn = form["button"];
 let langSelectDropdown = document.getElementById("language-select");
 const leaderboardTableBody = document.getElementById("leaderboard-body");
 const langSelectContainer = document.getElementById("language-select-container");
+const unHideLeaderboardTable = document.getElementById("leaderboard-table")
 
 let usersData = []; //array to store the data fetched
 
@@ -48,6 +48,7 @@ form.addEventListener("submit", async (e) => {
     usersData = await Promise.all(usernames.map(fetchUserData));
     console.log("Fetched usersData:", usersData);
     populateLanguageDropDown(usersData)
+    leaderboardTable("overall")
   } catch (error) {
     console.error("Error fetching user data:", error);
     alert("Failed to fetch user data. Please check usernames and try again.");
@@ -105,7 +106,54 @@ function leaderboardTable(selectedLanguage) {
   });
 
   //Sorting the not filtered usersData in descending order
+   filteredUsers.sort((a, b) => {
+    const scoreA = selectedLanguage === "overall" ? a.ranks.overall.score : a.ranks.languages[selectedLanguage].score;
+    const scoreB = selectedLanguage === "overall" ? b.ranks.overall.score : b.ranks.languages[selectedLanguage].score;
+    return scoreB - scoreA;
+   });
   
+  if (filteredUsers.length === 0) {
+    const row = document.createElement("tr");
+    const noDataCell = document.createElement("td");
+    noDataCell.colSpan = 3;
+    noDataCell.textContent = "No users have a ranking for this language.";
+    row.appendChild(noDataCell);
+    leaderboardTableBody.appendChild(row);
+    return;
 
+  }
+   const topScore = selectedLanguage === "overall"
+    ? filteredUsers[0].ranks.overall.score
+    : filteredUsers[0].ranks.languages[selectedLanguage].score;
+  
+  //Making the table rows for each user
+  filteredUsers.forEach(user => {
+    const tr = document.createElement("tr");
+
+      const usernameTd = document.createElement("td");
+    usernameTd.textContent = user.username;
+
+    const clanTd = document.createElement("td");
+    clanTd.textContent = user.clan || "-";
+
+    const scoreTd = document.createElement("td");
+    const score = selectedLanguage === "overall"
+      ? user.ranks.overall.score
+      : user.ranks.languages[selectedLanguage].score;
+    scoreTd.textContent = score;
+
+
+    tr.append(usernameTd, clanTd, scoreTd);
+    leaderboardTableBody.appendChild(tr);
+
+  })
+  unHideLeaderboardTable.hidden = false;
 }
+
+langSelectDropdown.addEventListener("change", () => {
+  const selectedLang = langSelectDropdown.value;
+  leaderboardTable(selectedLang);
+});
+
+
 //console.log(fetchUserData('some_user'))
